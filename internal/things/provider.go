@@ -26,7 +26,7 @@ func init() {
 func New(version string) *schema.Provider {
 	p := &schema.Provider{
 		ResourcesMap: map[string]*schema.Resource{
-			"things_dog": dogResource(),
+			"broke_drift": driftResource(),
 		},
 	}
 
@@ -44,7 +44,7 @@ type apiClient struct {
 func configure(version string, p *schema.Provider) func(context.Context, *schema.ResourceData) (any, diag.Diagnostics) {
 	return func(context.Context, *schema.ResourceData) (any, diag.Diagnostics) {
 		// Setup a User-Agent for your API client (replace the things name for yours):
-		// userAgent := p.UserAgent("terraform-things-scaffolding", version)
+		// userAgent := p.UserAgent("terraform-broke-scaffolding", version)
 		// TODO: myClient.UserAgent = userAgent
 
 		return &apiClient{}, nil

@@ -17,30 +17,29 @@ import (
 )
 
 // Ensure provider defined types fully satisfy framework interfaces
-var _ resource.Resource = &DogResource{}
-var _ resource.ResourceWithImportState = &DogResource{}
+var _ resource.Resource = &DriftAgainResource{}
+var _ resource.ResourceWithImportState = &DriftAgainResource{}
 
-func NewDogResource() resource.Resource {
-	return &DogResource{}
+func NewDriftAgainResource() resource.Resource {
+	return &DriftAgainResource{}
 }
 
-// DogResource defines the resource implementation.
-type DogResource struct {
+// DriftAgainResource defines the resource implementation.
+type DriftAgainResource struct {
 	client *http.Client
 }
 
-// DogResourceModel describes the resource data model.
-type DogResourceModel struct {
-	Id   types.String `tfsdk:"id"`
-	Legs types.Int64  `tfsdk:"legs"`
-	Tags types.Map    `tfsdk:"tags"`
+// DriftAgainResourceModel describes the resource data model.
+type DriftAgainResourceModel struct {
+	Id     types.String `tfsdk:"id"`
+	NoWork types.Map    `tfsdk:"no_work"`
 }
 
-func (r *DogResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_newdog"
+func (r *DriftAgainResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_drift_again"
 }
 
-func (r *DogResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *DriftAgainResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "Example resource",
@@ -53,12 +52,8 @@ func (r *DogResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"legs": schema.Int64Attribute{
-				Required:            true,
-				MarkdownDescription: "Dog legs",
-			},
-			"tags": schema.MapAttribute{
-				MarkdownDescription: "Dog tags",
+			"no_work": schema.MapAttribute{
+				MarkdownDescription: "This map is always driiifting",
 				Optional:            true,
 				ElementType:         types.StringType,
 			},
@@ -66,7 +61,7 @@ func (r *DogResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 	}
 }
 
-func (r *DogResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *DriftAgainResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -86,8 +81,8 @@ func (r *DogResource) Configure(ctx context.Context, req resource.ConfigureReque
 	r.client = client
 }
 
-func (r *DogResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var data *DogResourceModel
+func (r *DriftAgainResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var data *DriftAgainResourceModel
 
 	// Read Terraform plan data into the model
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &data)...)
@@ -122,8 +117,8 @@ func (r *DogResource) Create(ctx context.Context, req resource.CreateRequest, re
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *DogResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var data *DogResourceModel
+func (r *DriftAgainResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var data *DriftAgainResourceModel
 
 	// Read Terraform prior state data into the model
 	resp.Diagnostics.Append(req.State.Get(ctx, &data)...)
@@ -140,14 +135,14 @@ func (r *DogResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 	//     return
 	// }
 
-	data.Tags, _ = types.MapValue(types.StringType, make(map[string]attr.Value))
+	data.NoWork, _ = types.MapValue(types.StringType, make(map[string]attr.Value))
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *DogResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var data *DogResourceModel
+func (r *DriftAgainResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var data *DriftAgainResourceModel
 
 	// Read Terraform plan data into the model
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &data)...)
@@ -168,8 +163,8 @@ func (r *DogResource) Update(ctx context.Context, req resource.UpdateRequest, re
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *DogResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var data *DogResourceModel
+func (r *DriftAgainResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var data *DriftAgainResourceModel
 
 	// Read Terraform prior state data into the model
 	resp.Diagnostics.Append(req.State.Get(ctx, &data)...)
@@ -187,6 +182,6 @@ func (r *DogResource) Delete(ctx context.Context, req resource.DeleteRequest, re
 	// }
 }
 
-func (r *DogResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *DriftAgainResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

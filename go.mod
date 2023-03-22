@@ -1,4 +1,4 @@
-module github.com/hashicorp/terraform-provider-things
+module github.com/hashicorp/terraform-provider-broke
 
 go 1.18
 

@@ -10,33 +10,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func dogResource() *schema.Resource {
+func driftResource() *schema.Resource {
 	return &schema.Resource{
 		// This description is used by the documentation generator and the language server.
-		Description: "Resource for dog",
+		Description: "Always drift!",
 
-		CreateContext: resourceDogCreate,
-		ReadContext:   resourceDogRead,
-		UpdateContext: resourceDogUpdate,
-		DeleteContext: resourceDogDelete,
+		CreateContext: resourceDriftCreate,
+		ReadContext:   resourceDriftRead,
+		UpdateContext: resourceDriftUpdate,
+		DeleteContext: resourceDriftDelete,
 
 		Schema: map[string]*schema.Schema{
-			"legs": {
-				// This description is used by the documentation generator and the language server.
-				Description: "Number of dog legs",
-				Type:        schema.TypeInt,
-				Required:    true,
-			},
-			"tags": {
-				Description: "Dog tags",
-				Type:        schema.TypeMap,
-				Optional:    true,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
-				},
-			},
-			"tags_computed": {
-				Description: "Dog tags - computed",
+			"no_work": {
+				Description: "This attribute should always drift",
 				Type:        schema.TypeMap,
 				Optional:    true,
 				Elem: &schema.Schema{
@@ -47,7 +33,7 @@ func dogResource() *schema.Resource {
 	}
 }
 
-func resourceDogCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+func resourceDriftCreate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	// use the meta value to retrieve your client from the things configure method
 	// client := meta.(*apiClient)
 
@@ -61,29 +47,29 @@ func resourceDogCreate(ctx context.Context, d *schema.ResourceData, meta any) di
 	// write logs using the tflog package
 	// see https://pkg.go.dev/github.com/hashicorp/terraform-plugin-log/tflog
 	// for more information
-	tflog.Trace(ctx, fmt.Sprintf("created a dog with id %s", id.String()))
+	tflog.Trace(ctx, fmt.Sprintf("created drift with id %s", id.String()))
 
 	return nil
 }
 
-func resourceDogRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+func resourceDriftRead(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	// use the meta value to retrieve your client from the things configure method
 	// client := meta.(*apiClient)
 
-	tflog.Debug(ctx, "setting empty dog tags")
+	tflog.Debug(ctx, "setting empty drift no_work")
 	forceTags := map[string]interface{}{}
 	d.Set("tags", forceTags)
 	return nil
 }
 
-func resourceDogUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+func resourceDriftUpdate(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	// use the meta value to retrieve your client from the things configure method
 	// client := meta.(*apiClient)
 
 	return diag.Errorf("not implemented")
 }
 
-func resourceDogDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
+func resourceDriftDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {
 	// use the meta value to retrieve your client from the things configure method
 	// client := meta.(*apiClient)
 

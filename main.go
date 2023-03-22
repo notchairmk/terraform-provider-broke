@@ -9,8 +9,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 	"github.com/hashicorp/terraform-plugin-go/tfprotov5/tf5server"
 	"github.com/hashicorp/terraform-plugin-mux/tf5muxserver"
-	"github.com/hashicorp/terraform-provider-things/internal/newthings"
-	"github.com/hashicorp/terraform-provider-things/internal/things"
+	"github.com/hashicorp/terraform-provider-broke/internal/newthings"
+	"github.com/hashicorp/terraform-provider-broke/internal/things"
 )
 
 // Run "go generate" to format example terraform files and generate the docs for the registry/website
@@ -39,14 +39,6 @@ func main() {
 	flag.BoolVar(&debugMode, "debug", false, "set to true to run the things with support for debuggers like delve")
 	flag.Parse()
 
-	//opts := &plugin.ServeOpts{
-	//	Debug: debugMode,
-	//
-	//	// TODO: update this string with the full name of your things as used in your configs
-	//	ProviderAddr: "registry.terraform.io/notchairmk/things",
-	//
-	//	ProviderFunc: things.New(version),
-	//}
 	mainProvider := things.New(version).GRPCProvider
 	otherProvider := newthings.New(version)
 
@@ -62,19 +54,10 @@ func main() {
 
 	var opts []tf5server.ServeOpt
 	if debugMode {
-		// reattachConfigCh := make(chan *plugin.ReattachConfig)
-		// go func() {
-		// 	reattachConfig, err := waitForReattachConfig(reattachConfigCh)
-		// 	if err != nil {
-		// 		fmt.Printf("Error getting reattach config: %s\n", err)
-		// 		return
-		// 	}
-		// 	printReattachConfig(reattachConfig)
-		// }()
 		opts = append(opts, tf5server.WithManagedDebug())
 	}
 
-	if err := tf5server.Serve("registry.terraform.io/notchairmk/things", muxserver.ProviderServer, opts...); err != nil {
+	if err := tf5server.Serve("registry.terraform.io/notchairmk/broke", muxserver.ProviderServer, opts...); err != nil {
 		log.Println(err.Error())
 	}
 }

@@ -2,6 +2,7 @@ package newthings
 
 import (
 	"context"
+	_ "embed"
 	"net/http"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -10,34 +11,37 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 )
 
-// Ensure NewThingsProvider satisfies various provider interfaces.
-var _ provider.Provider = &NewThingsProvider{}
+// Ensure NewBrokeProvider satisfies various provider interfaces.
+var _ provider.Provider = &NewBrokeProvider{}
 
-// NewThingsProvider defines the provider implementation.
-type NewThingsProvider struct {
+//go:embed moby.dick.txt
+var mobyDickText string
+
+// NewBrokeProvider defines the provider implementation.
+type NewBrokeProvider struct {
 	// version is set to the provider version on release, "dev" when the
 	// provider is built and ran locally, and "test" when running acceptance
 	// testing.
 	version string
 }
 
-// NewThingsProviderModel describes the provider data model.
-type NewThingsProviderModel struct {
+// NewBrokeProviderModel describes the provider data model.
+type NewBrokeProviderModel struct {
 }
 
-func (p *NewThingsProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
-	resp.TypeName = "things"
+func (p *NewBrokeProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
+	resp.TypeName = "broke"
 	resp.Version = p.version
 }
 
-func (p *NewThingsProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
+func (p *NewBrokeProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{},
 	}
 }
 
-func (p *NewThingsProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
-	var data NewThingsProviderModel
+func (p *NewBrokeProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
+	var data NewBrokeProviderModel
 
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
 
@@ -54,18 +58,19 @@ func (p *NewThingsProvider) Configure(ctx context.Context, req provider.Configur
 	resp.ResourceData = client
 }
 
-func (p *NewThingsProvider) Resources(ctx context.Context) []func() resource.Resource {
+func (p *NewBrokeProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
-		NewDogResource,
+		NewMobyDickResource,
+		NewDriftAgainResource,
 	}
 }
 
-func (p *NewThingsProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
+func (p *NewBrokeProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{}
 }
 
 func New(version string) provider.Provider {
-	return &NewThingsProvider{
+	return &NewBrokeProvider{
 		version: version,
 	}
 }
