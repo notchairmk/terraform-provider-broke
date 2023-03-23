@@ -21,7 +21,7 @@ func driftResource() *schema.Resource {
 		DeleteContext: resourceDriftDelete,
 
 		Schema: map[string]*schema.Schema{
-			"no_work": {
+			"drifted_attribute": {
 				Description: "This attribute should always drift",
 				Type:        schema.TypeMap,
 				Optional:    true,
@@ -56,9 +56,17 @@ func resourceDriftRead(ctx context.Context, d *schema.ResourceData, meta any) di
 	// use the meta value to retrieve your client from the things configure method
 	// client := meta.(*apiClient)
 
-	tflog.Debug(ctx, "setting empty drift no_work")
-	forceTags := map[string]interface{}{}
-	d.Set("tags", forceTags)
+	tflog.Debug(ctx, "setting empty drift.drifted_attribute")
+	newTag, err := uuid.NewV7()
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	forcedDriftMap := map[string]interface{}{
+		"foo": newTag.String(),
+	}
+	d.Set("drifted_attribute", forcedDriftMap)
+
 	return nil
 }
 
@@ -66,7 +74,7 @@ func resourceDriftUpdate(ctx context.Context, d *schema.ResourceData, meta any) 
 	// use the meta value to retrieve your client from the things configure method
 	// client := meta.(*apiClient)
 
-	return diag.Errorf("not implemented")
+	return nil
 }
 
 func resourceDriftDelete(ctx context.Context, d *schema.ResourceData, meta any) diag.Diagnostics {

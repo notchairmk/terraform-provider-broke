@@ -17,7 +17,7 @@ Always drift!
 
 ### Optional
 
-- `no_work` (Map of String) This attribute should always drift
+- `drifted_attribute` (Map of String) This attribute should always drift
 
 ### Read-Only
 
